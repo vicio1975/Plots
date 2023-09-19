@@ -4,43 +4,19 @@ Created by Vincenzo Sammartano
 @author: v.sammartano@gmail.com
 """
 ##Libraried to be used
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox, StringVar, Entry, font
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import re
 import os
+import tkinter as tk
+import pandas as pd
 from matplotlib import style
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from tkinter import ttk, filedialog, messagebox, StringVar, Entry, font
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
-
-delimiter_mapping = {
-    "Comma": ",",
-    "Semicolon": ";",
-    "Tab": "\t",
-    "Space": r'\s+'
-    }
+###############
 
 ###Function block
-def update_statistics():
-    """
-    This is the statistics module
-    """
-    global filtered_df_stat
-    
-    if filtered_df is not None:
-        statistics_text.delete(1.0, tk.END)  # Clear the previous text
-        # Create a dictionary to map the original column names to the variable names
-        column_mapping = {filtered_df.columns[i+1]: variable_names[i] for i in range(len(variable_names))}
-        filtered_df_stat = pd.DataFrame.copy(filtered_df)
-        # Rename the columns of the filtered DataFrame using the dictionary
-        filtered_df_stat.rename(columns=column_mapping, inplace=True)
-        L = len(variable_names)
-        statistics = filtered_df_stat.iloc[:, 1:L+1].describe()
-        statistics_text.insert(tk.END, statistics)
-    
-       
 def select_file():
     """
     Open a file dialog to select a data file.
@@ -135,20 +111,6 @@ def plot_chart(index):
     canvas.get_tk_widget().grid(row=0, column=1, rowspan=4)
     current_chart_index = index
     
-def save_plot():
-    """
-    Save the current plot to an image file.
-    """
-    if canvas:
-        file_path = file_path_var.get()
-        # Get the selected variable name
-        variable_name = variable_names[current_chart_index]
-        # Define the filename for saving
-        save_filename = f"{os.path.splitext(os.path.basename(file_path))[0]}_{variable_name}.png"
-        # Use savefig to save the current plot
-        fig.savefig(save_filename)
-        messagebox.showinfo("Info", f"Plot saved as {save_filename}")
-        
 def show_next_chart():
     """
     Function to show the next chart
@@ -168,7 +130,21 @@ def show_previous_chart():
         current_chart_index -= 1
         clean_plot()
         plot_chart(current_chart_index)
-        
+
+def save_plot():
+    """
+    Save the current plot to an image file.
+    """
+    if canvas:
+        file_path = file_path_var.get()
+        # Get the selected variable name
+        variable_name = variable_names[current_chart_index]
+        # Define the filename for saving
+        save_filename = f"{os.path.splitext(os.path.basename(file_path))[0]}_{variable_name}.png"
+        # Use savefig to save the current plot
+        fig.savefig(save_filename)
+        messagebox.showinfo("Info", f"Plot saved as {save_filename}")
+
 def create_statistics_tab():
     """
     Statistics part
@@ -193,39 +169,63 @@ def create_statistics_tab():
     statistics_text.config(xscrollcommand=statistics_scrollbar_H.set)
 
     # Button to calculate statistics
-    calculate_stats_button = tk.Button(statistics_frame, text="Calculate Statistics", command=update_statistics, font=f_H10B)
+    calculate_stats_button = tk.Button(statistics_frame, text="Calculate Statistics", command=update_statistics, font=f_H10)
     calculate_stats_button.pack(pady=10)
+
+def update_statistics():
+    """
+    This is the statistics module
+    """
+    global filtered_df_stat
     
+    if filtered_df is not None:
+        statistics_text.delete(1.0, tk.END)  # Clear the previous text
+        # Create a dictionary to map the original column names to the variable names
+        column_mapping = {filtered_df.columns[i+1]: variable_names[i] for i in range(len(variable_names))}
+        filtered_df_stat = pd.DataFrame.copy(filtered_df)
+        # Rename the columns of the filtered DataFrame using the dictionary
+        filtered_df_stat.rename(columns=column_mapping, inplace=True)
+        L = len(variable_names)
+        statistics = filtered_df_stat.iloc[:, 1:L+1].describe()
+        statistics_text.insert(tk.END, statistics)
     
 ###End of Function
 
 ###Main Program
 if __name__ == "__main__":
-
     # Create the main application window
     root = tk.Tk()
     root.title("Data Analysis App")
     root.geometry("1000x510+200+150")  # Adjusted the window size
     root.resizable(width=False, height=False)
-
+    
+    ##Global block vars
+    # Delimiter dictionary
+    delimiter_mapping = {
+        "Comma": ",",
+        "Semicolon": ";",
+        "Tab": "\t",
+        "Space": r'\s+'
+        }
+    #Fonts
+    f_H12B = font.Font(family='Helvetica', size=12, weight='bold')
+    f_H12 = font.Font(family='Helvetica', size=12, weight='normal')
+    f_H11B = font.Font(family='Helvetica', size=11, weight='bold')
+    f_H10 = font.Font(family='Helvetica', size=10, weight='normal')
+    f_H08 = font.Font(family='Helvetica', size=8, weight='normal')
+    font.families()
+    # Variable to store the selected file path
+    file_path_var = StringVar()
+    #####################
+    
     # My notebook
     my_notebook = ttk.Notebook(root)
     my_notebook.pack()
 
-    # Fonts
-    f_H12 = tk.font.Font(family='Helvetica', size=12, weight='normal')
-    f_H12B = tk.font.Font(family='Helvetica', size=12, weight='bold')
-    f_H10 = tk.font.Font(family='Helvetica', size=10, weight='normal')
-    f_H10B = tk.font.Font(family='Helvetica', size=10, weight='bold')
-    font.families()
-
-    # Variable to store the selected file path
-    file_path_var = StringVar()
-
     # Main frames
     top_frame_1 = tk.Frame(my_notebook, width=10)
     top_frame_1.grid(row=0, column=0, sticky="w")
-    statistics_frame = ttk.Frame(my_notebook)   
+    statistics_frame = tk.Frame(my_notebook)   
 
     # Window tabs
     my_notebook.add(top_frame_1, text="Data Chart")
@@ -285,40 +285,38 @@ if __name__ == "__main__":
     # Figure frame
     frame_fig = tk.LabelFrame(top_frame_1, text="", width=495, height=458, font=f_H10)
     frame_fig.grid(row=0, column=1, padx = 10, pady = 5,rowspan=5, sticky="w")
-    frame_fig.config(borderwidth=0, bg="white")
+    frame_fig.config(borderwidth=0.5, bg="white")
 
-    #Buttons
+    #Buttons Frame for plot
     button_frame = tk.LabelFrame(top_frame_1, text="Actions",width=50)
     button_frame.grid(row=3, column=0, padx=2,  sticky="w")
-
+    
     # Button to plot data
-    plot_button = tk.Button(button_frame, text="Plot Data", command=analyze_data,
-                            width= 8)
+    plot_button = tk.Button(button_frame, text="Plot Data", command=analyze_data,width= 8)
     plot_button.grid(row=0, column=0, padx=5, pady=8, sticky="w")
 
     # Button to show the next chart
     next_button = tk.Button(button_frame, text="Next", command=show_next_chart,
                             width= 8)
-    next_button.grid(row=0, column=1, padx=5, pady=8, sticky="w")
+    next_button.grid(row=1, column=1, padx=5, pady=8, sticky="w")
 
     # Button to show the previous chart
     prev_button = tk.Button(button_frame, text="Previous", command=show_previous_chart,
                             width= 8)
-    prev_button.grid(row=0, column=2, padx=5, pady=8, sticky="w")
+    prev_button.grid(row=1, column=0, padx=5, pady=8, sticky="w")
 
     # Button to clear the current plot
     clean_button = tk.Button(button_frame, text="Clean Plot", command=clean_plot,
                              width= 8)
-    clean_button.grid(row=0, column=3, padx=5, pady=8, sticky="w")
+    clean_button.grid(row=0, column=1, padx=5, pady=8, sticky="w")
 
     # button to save the current plot
     save_plot_button = tk.Button(button_frame, text="Save Plot", command=save_plot, width=10)
     save_plot_button.grid(row=0, column=4, padx=5, pady=8, sticky="w")
 
     # Exit button
-    exit_button = tk.Button(button_frame, text="Exit", command=root.destroy,
-                            width= 10)
-    exit_button.grid(row=1, column=0, padx=5,pady=8, columnspan=5)
+    exit_button = tk.Button(button_frame, text="Exit", command=root.destroy,width= 10)
+    exit_button.grid(row=1, column=4, padx=5,pady=8) #columnspan=0)
 
     # Figure initialization
     #the inches have to be equale to the dimension of the labelframe at a specific dpi
