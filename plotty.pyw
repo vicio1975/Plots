@@ -3,7 +3,7 @@
 Created by Vincenzo Sammartano
 @author: v.sammartano@gmail.com
 """
-##Libraried to be used
+##Libraries to be used
 import re
 import os
 import tkinter as tk
@@ -71,9 +71,9 @@ def analyze_data():
         plot_chart(current_chart_index)  # Plot the first chart
 
         # Show the Next button
-        next_button.grid(row=0, column=1, padx=5, pady=8, sticky="w")
+        next_button.grid(row=1, column=1, padx=5, pady=8, sticky="w")
         # Show the Previous button
-        prev_button.grid(row=0, column=2, padx=5, pady=8, sticky="w")
+        prev_button.grid(row=1, column=0, padx=5, pady=8, sticky="w")
 
     except ValueError as e:
         messagebox.showerror("Error", str(e))
@@ -96,6 +96,9 @@ def plot_chart(index):
     """
     global ax, canvas, current_chart_index
 
+    if index > len(variable_names) - 1:
+        index = len(variable_names) - 1
+        
     ax.clear()  # Clear the previous plot
     # Use the selected variable name as the label
     variable_name = variable_names[index]
@@ -104,7 +107,7 @@ def plot_chart(index):
     ax.set_ylabel(variable_name)
     ax.ticklabel_format(axis= 'y', style='plain')
     ax.legend()
-    
+     
     if canvas:
         canvas.get_tk_widget().pack_forget()  # Clear the previous canvas
     canvas = FigureCanvasTkAgg(fig, master=frame_fig)
@@ -207,6 +210,7 @@ if __name__ == "__main__":
         "Tab": "\t",
         "Space": r'\s+'
         }
+    
     #Fonts
     f_H12B = font.Font(family='Helvetica', size=12, weight='bold')
     f_H12 = font.Font(family='Helvetica', size=12, weight='normal')
