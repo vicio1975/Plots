@@ -1,4 +1,4 @@
-# Plotty
+# Plotty app
 It imports various libraries and modules, including tkinter for the GUI, pandas for data manipulation,
 and matplotlib for plotting.
 - The select_file function opens a file dialog to allow the user to select a data file.
