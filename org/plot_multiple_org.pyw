@@ -5,8 +5,13 @@ Created by Vincenzo Sammartano
 """
 import tkinter as tk
 from tkinter import filedialog, messagebox
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
+from scipy import signal, optimize
+import numpy as np
+
+#max https://www.youtube.com/watch?v=KmjguC9-IUU
+#signal processing
 
 # Define a function to analyze the selected data file with given parameters
 def analyze_data():
