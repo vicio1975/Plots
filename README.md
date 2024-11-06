@@ -29,3 +29,6 @@ Min: The minimum value in the data.
 50% (median): The median (50th percentile) value.
 75%: The 75th percentile value.
 Max: The maximum value in the data.
+
+
+pyinstaller --onefile pythonScriptName.py --icon iconfile.png

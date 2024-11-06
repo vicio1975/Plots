@@ -12,6 +12,7 @@ README.txt
 *.air
 *.ipa
 *.apk
+*.exe
 
 
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
