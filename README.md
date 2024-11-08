@@ -1,34 +1,65 @@
 # Plotty app
-It imports various libraries and modules, including tkinter for the GUI, pandas for data manipulation,
-and matplotlib for plotting.
-- The select_file function opens a file dialog to allow the user to select a data file.
-- The analyze_data function processes the selected data file with user-defined parameters, including header lines, time filters, column separator, and variable names. It then plots the data.
-- The clean_plot function clears the current plot.
-- The plot_chart function plots a chart based on the selected variable.
-- The show_next_chart and show_previous_chart functions allow the user to navigate between different charts when multiple variables are selected.
-- The save_plot function saves the current chart as an image file.
-- The create_statistics_tab function sets up a tab for displaying descriptive statistics of the data.
-- The update_statistics function calculates and displays descriptive statistics for the selected data.
-- The main part of the program creates a GUI window using tkinter and sets up various frames, buttons, entry fields, and charts for data analysis and visualization.
-The application's main loop (root.mainloop()) runs the GUI and waits for user interactions.
+This is a Tkinter-based Python application designed for visualizing and analyzing data using Pandas and Matplotlib. It provides a graphical user interface (GUI) for loading datasets, selecting columns for plotting, customizing plot appearance, and displaying statistical summaries of plotted data.
 
-The statistics are calculated using Pandas and the "describe" method.
-This method is applied to the filtered_df_stat, which is a DataFrame that stores the filtered data,
-with columns renamed based on the user-defined variable names.
+Features
+Load Data from CSV Files: Import datasets with user-defined delimiters and header lines.
+Data Plotting: Select columns to use as X and Y axes for plotting data.
+Customize Plots: Set and update plot titles, X-axis, and Y-axis labels through a user-friendly interface.
+Plot Persistence: Ensures that plot customization is retained when additional data is plotted.
+View Statistics: Display basic statistics (mean, median, standard deviation, min, max) for currently plotted data.
+Save Plots: Save plots in various formats (e.g., PNG, JPG, PDF, SVG) with customizable resolution (DPI).
 
-The describe method is applied to a subset of filtered_df_stat, specifically the columns containing the data for each variable.
-This is done with the filtered_df_stat.iloc[:, 1:L+1].describe() line. L is the number of variables.
+Installation
+Prerequisites
+Python 3.x
+Required Python packages:
+tkinter (GUI library)
+pandas (data analysis)
+matplotlib (data visualization)
 
-The describe method generates summary statistics for each variable, including:
+Installation Steps
+Clone or download this repository.
+Ensure you have the necessary dependencies installed by running
+Copy code: pip install pandas matplotlib
 
-Count: The number of non-null (valid) data points.
-Mean: The average value of the variable.
-Std: The standard deviation, a measure of the spread of the data.
-Min: The minimum value in the data.
-25%: The 25th percentile value.
-50% (median): The median (50th percentile) value.
-75%: The 75th percentile value.
-Max: The maximum value in the data.
+Run the main application script:
+Copy code: python plotty_VER7_5.pyw
+
+Usage
+1. Load Data
+Click on the Load Data button.
+Select a CSV file and specify the delimiter and number of header lines to skip.
+2. Configure Data
+Select the column to use as the X-axis.
+Select one or more columns for the Y-axis.
+Optionally, provide variable names for legend labels.
+3. Plot Data
+Click on the Plot button to generate the plot.
+Plots are updated only if new columns or variable names are selected.
+4. Customize Plot
+Click on Tune Plot to open a dialog for setting the plot title, X-axis, and Y-axis labels.
+Changes are saved and persist even if additional data is plotted later.
+5. Show Statistics
+Click on Show Statistics to display a window with basic statistics (mean, median, etc.) for the currently plotted data.
+6. Save Plot
+Click on Save Plot to open a dialog for specifying resolution (DPI) and format (e.g., PNG, JPG).
+Save the plot with custom settings.
+GUI Controls
+Load Data: Opens a file dialog to load a dataset.
+Plot: Generates a plot based on selected data columns.
+Clear Plot: Clears the current plot and resets selected data.
+Tune Plot: Opens a dialog for customizing plot labels and title.
+Save Plot: Opens a dialog for saving the plot with customizable settings.
+Show Statistics: Displays basic statistics for the currently plotted data.
+Exit: Closes the application.
+
+Contributing
+Contributions are welcome! If you have ideas for new features or improvements, feel free to open an issue or submit a pull request.
+
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 
-pyinstaller --onefile pythonScriptName.py --icon iconfile.png
+NB: 
+You can also build you own exe file as follow: 
+pyinstaller --onefile plotty_VER7_5.pyw --icon iconfile.png

@@ -6,6 +6,7 @@ bin-release/
 README.txt
 # Other files and folders
 .settings/
+old/
 
 # Executables
 *.swf
