@@ -128,7 +128,7 @@ def plot_data():
     # Override X-axis label if a user-provided name exists
     user_provided_x_name = variable_name_entries[selected_x_column][1].get().strip()
     if user_provided_x_name:
-        x_axis_label = f"X-axis: {user_provided_x_name}"
+        x_axis_label = f"{user_provided_x_name}"
 
     ax.set_title(plot_title)
     ax.set_xlabel(x_axis_label)
@@ -282,7 +282,7 @@ def show_statistics():
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.title("Data Analysis App")
+    root.title("Plotty VER7_5")
     root.geometry("970x650+200+150")
     root.resizable(width=False, height=False)
     
