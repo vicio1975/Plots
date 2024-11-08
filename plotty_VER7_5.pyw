@@ -83,7 +83,7 @@ def populate_column_checkboxes():
             entry.grid(row=idx, column=3, sticky='w', padx=30, pady=2)
 
 def plot_data():
-    global selected_x_column, selected_y_columns, canvas, last_plotted_data
+    global selected_x_column, selected_y_columns, canvas
     global plot_title, x_axis_label, y_axis_label
     global current_plotted_x, current_plotted_y  # Track current plotted data
 
@@ -104,43 +104,50 @@ def plot_data():
             legend_labels.append(var_name.get())
             variable_names.append(var_name.get())
 
-    if (selected_x_column == last_plotted_data["x_column"] and
-        selected_y_columns == last_plotted_data["y_columns"] and
-        variable_names == last_plotted_data["variable_names"]):
-        messagebox.showinfo("Info", "No changes detected in data selection or variable names. Plot unchanged.")
+    if selected_x_column is None or not selected_y_columns:
+        messagebox.showwarning("Warning", "Please select both X and Y columns for plotting.")
         return
-
-    last_plotted_data["x_column"] = selected_x_column
-    last_plotted_data["y_columns"] = selected_y_columns
-    last_plotted_data["variable_names"] = variable_names
 
     current_plotted_x = selected_x_column
     current_plotted_y = selected_y_columns
 
-    if selected_x_column is not None and selected_y_columns:
-        ax.clear()
-        x = loaded_data.iloc[:, selected_x_column]
-        for y_col in selected_y_columns:
-            y = loaded_data.iloc[:, y_col]
-            ax.plot(x, y, label=variable_name_entries[y_col][1].get())
-        
-        ax.set_title(plot_title)
-        ax.set_xlabel(x_axis_label)
-        ax.set_ylabel(y_axis_label)
+    ax.clear()
+    x = loaded_data.iloc[:, selected_x_column]
+    for y_col in selected_y_columns:
+        y = loaded_data.iloc[:, y_col]
+        ax.plot(x, y, label=variable_name_entries[y_col][1].get())
+    
+    # Set default plot title if not provided
+    if not plot_title:
+        plot_title = "Data Plot"
+    
+    # Default axis labels
+    x_axis_label = "X-axis"
+    y_axis_label = "Y-axis"
 
-        try:
-            if any(variable_names):
-                ax.legend().remove()
-                ax.legend()
-            else:
-                messagebox.showwarning("Warning", "Variable names added...legend is empty!")
-        except (IndexError, AttributeError):
-            messagebox.showwarning("Warning", "Error updating legend. Check variable names and indices.")
+    # Override X-axis label if a user-provided name exists
+    user_provided_x_name = variable_name_entries[selected_x_column][1].get().strip()
+    if user_provided_x_name:
+        x_axis_label = f"X-axis: {user_provided_x_name}"
+
+    ax.set_title(plot_title)
+    ax.set_xlabel(x_axis_label)
+    ax.set_ylabel(y_axis_label)
+
+    try:
+        if any(variable_names):
+            ax.legend().remove()
+            ax.legend()
+        else:
+            messagebox.showwarning("Warning", "Variable names added...legend is empty!")
+    except (IndexError, AttributeError):
+        messagebox.showwarning("Warning", "Error updating legend. Check variable names and indices.")
 
     if canvas:
         canvas.get_tk_widget().pack_forget()
     canvas = FigureCanvasTkAgg(fig, master=frame_fig)
     canvas.get_tk_widget().grid(row=0, column=1, rowspan=4)
+
 
 def clear_plot():
     global datasets, column_checkboxes, variable_name_entries
