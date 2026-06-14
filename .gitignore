@@ -19,3 +19,8 @@ old/
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
+plotty_VER7_5.spec
+plotty_VER7_7.spec
+plotty.exe
+plotty_VER7_7.pyw
+plotty_VER7_7.pyw

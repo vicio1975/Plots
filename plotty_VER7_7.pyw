@@ -94,6 +94,11 @@ checkbox_canvas.config(yscrollcommand=checkbox_scrollbar.set)
 checkboxes_frame = tk.Frame(checkbox_canvas)
 checkbox_canvas.create_window((0, 0), window=checkboxes_frame, anchor="nw")
 
+def on_frame_configure(event):
+    checkbox_canvas.configure(scrollregion=checkbox_canvas.bbox("all"))
+
+checkboxes_frame.bind("<Configure>", on_frame_configure)
+
 # === Figure Frame ===
 frame_fig = tk.LabelFrame(top_frame_1, text="", width=490, height=458, font=f_H10)
 frame_fig.grid(row=0, column=1, padx=5, pady=5, rowspan=5, sticky="nesw")
@@ -229,6 +234,7 @@ def populate_column_checkboxes(previous_states=None):
             column_label.grid(row=idx, column=2, sticky='w', padx=32, pady=2)
             entry.grid(row=idx, column=3, sticky='w', padx=30, pady=2)
     checkboxes_frame.update_idletasks()  # Forza l'aggiornamento della GUI
+    checkbox_canvas.config(scrollregion=checkbox_canvas.bbox("all"))
 
 def plot_data():
     """Plot the selected X column against the selected Y columns, labeled with user-defined variable names."""
